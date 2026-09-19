@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Order Service - PLUS-TECH.COM</title>
+
     <link rel="stylesheet" href="style.css">
 
     <style>
@@ -61,7 +63,7 @@
             padding: 14px;
             border: none;
             border-radius: 8px;
-            background: #0d6efd;
+            background: #25D366;
             color: white;
             font-size: 16px;
             font-weight: bold;
@@ -101,47 +103,81 @@
             Fill in the information below to submit your service request.
         </p>
 
-        <form>
+        <form id="orderForm">
 
             <div class="form-group">
                 <label for="name">Full Name</label>
-                <input type="text" id="name" name="name"
-                       placeholder="Enter your full name" required>
+
+                <input
+                    type="text"
+                    id="name"
+                    placeholder="Enter your full name"
+                    required>
             </div>
 
             <div class="form-group">
                 <label for="contact">WhatsApp / Phone</label>
-                <input type="tel" id="contact" name="contact"
-                       placeholder="Enter your WhatsApp or phone number" required>
+
+                <input
+                    type="tel"
+                    id="contact"
+                    placeholder="Enter your WhatsApp or phone number"
+                    required>
             </div>
 
             <div class="form-group">
                 <label for="service">Service</label>
-                <select id="service" name="service" required>
+
+                <select id="service" required>
+
                     <option value="">Select a service</option>
-                    <option value="IMEI Service">IMEI Service</option>
-                    <option value="Network Service">Network Service</option>
-                    <option value="iCloud Service">iCloud Service</option>
-                    <option value="Server Service">Server Service</option>
-                    <option value="Digital Tools">Digital Tools</option>
-                    <option value="Activation Service">Activation Service</option>
+
+                    <option value="IMEI Service">
+                        IMEI Service
+                    </option>
+
+                    <option value="Network Service">
+                        Network Service
+                    </option>
+
+                    <option value="iCloud Service">
+                        iCloud Service
+                    </option>
+
+                    <option value="Server Service">
+                        Server Service
+                    </option>
+
+                    <option value="Digital Tools">
+                        Digital Tools
+                    </option>
+
+                    <option value="Activation Service">
+                        Activation Service
+                    </option>
+
                 </select>
             </div>
 
             <div class="form-group">
                 <label for="device">Device / Model</label>
-                <input type="text" id="device" name="device"
-                       placeholder="Example: Samsung Galaxy S23">
+
+                <input
+                    type="text"
+                    id="device"
+                    placeholder="Example: Samsung Galaxy S23">
             </div>
 
             <div class="form-group">
                 <label for="message">Describe your request</label>
-                <textarea id="message" name="message"
-                          placeholder="Describe the service you need"></textarea>
+
+                <textarea
+                    id="message"
+                    placeholder="Describe the service you need"></textarea>
             </div>
 
             <button type="submit" class="submit-btn">
-                Submit Order
+                Submit Order on WhatsApp
             </button>
 
         </form>
@@ -153,6 +189,37 @@
 <footer>
     <p>© 2026 PLUS-TECH.COM. All rights reserved.</p>
 </footer>
+
+
+<script>
+
+document.getElementById("orderForm").addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    const name = document.getElementById("name").value;
+    const contact = document.getElementById("contact").value;
+    const service = document.getElementById("service").value;
+    const device = document.getElementById("device").value;
+    const message = document.getElementById("message").value;
+
+    const whatsappMessage =
+        "Bonjour PLUS-TECH.COM,%0A%0A" +
+        "*Nouvelle demande de service*%0A%0A" +
+        "*Nom:* " + encodeURIComponent(name) + "%0A" +
+        "*WhatsApp / Téléphone:* " + encodeURIComponent(contact) + "%0A" +
+        "*Service:* " + encodeURIComponent(service) + "%0A" +
+        "*Appareil:* " + encodeURIComponent(device) + "%0A" +
+        "*Demande:* " + encodeURIComponent(message);
+
+    const whatsappURL =
+        "https://wa.me/23672089545?text=" + whatsappMessage;
+
+    window.open(whatsappURL, "_blank");
+
+});
+
+</script>
 
 </body>
 </html>
