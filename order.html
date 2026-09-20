@@ -1,35 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Order Service - PLUS-TECH.COM</title>
+    <title>Commander un service - PLUS-TECH.COM</title>
 
     <link rel="stylesheet" href="style.css">
 
     <style>
         .order-container {
-            max-width: 700px;
-            margin: 60px auto;
-            padding: 20px;
+            max-width: 650px;
+            margin: 40px auto;
+            padding: 25px;
         }
 
-        .order-card {
+        .order-container h1 {
+            text-align: center;
+            color: #0b1f3a;
+        }
+
+        .order-container p {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .order-form {
             background: white;
-            padding: 30px;
+            padding: 25px;
             border-radius: 15px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-        }
-
-        .order-card h1 {
-            color: #0b1f3a;
-            margin-bottom: 10px;
-        }
-
-        .order-card p {
-            color: #666;
-            margin-bottom: 25px;
         }
 
         .form-group {
@@ -40,6 +41,7 @@
             display: block;
             margin-bottom: 7px;
             font-weight: bold;
+            color: #0b1f3a;
         }
 
         .form-group input,
@@ -49,13 +51,19 @@
             padding: 13px;
             border: 1px solid #ddd;
             border-radius: 8px;
-            font-size: 15px;
             box-sizing: border-box;
+            font-size: 15px;
         }
 
         .form-group textarea {
-            min-height: 120px;
+            min-height: 110px;
             resize: vertical;
+        }
+
+        .imei-note {
+            font-size: 13px;
+            color: #777;
+            margin-top: 5px;
         }
 
         .submit-btn {
@@ -63,7 +71,7 @@
             padding: 14px;
             border: none;
             border-radius: 8px;
-            background: #25D366;
+            background: #0d6efd;
             color: white;
             font-size: 16px;
             font-weight: bold;
@@ -79,6 +87,7 @@
             margin-bottom: 20px;
             color: #0d6efd;
             text-decoration: none;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -92,97 +101,84 @@
 <main class="order-container">
 
     <a href="imei-service.html" class="back-link">
-        ← Back to IMEI Service
+        ← Retour aux services IMEI
     </a>
 
-    <div class="order-card">
+    <h1>Commander un service</h1>
 
-        <h1>Order Service</h1>
+    <p>
+        Remplissez les informations de votre appareil.
+    </p>
 
-        <p>
-            Fill in the information below to submit your service request.
-        </p>
+    <form class="order-form" onsubmit="sendWhatsApp(event)">
 
-        <form id="orderForm">
+        <div class="form-group">
+            <label for="name">Nom complet</label>
+            <input type="text" id="name" required>
+        </div>
 
-            <div class="form-group">
-                <label for="name">Full Name</label>
+        <div class="form-group">
+            <label for="phone">WhatsApp / Téléphone</label>
+            <input type="tel" id="phone" required>
+        </div>
 
-                <input
-                    type="text"
-                    id="name"
-                    placeholder="Enter your full name"
-                    required>
+        <div class="form-group">
+            <label for="service">Service</label>
+
+            <select id="service" required>
+                <option value="">-- Sélectionnez un service --</option>
+                <option value="MDM Tecno / Infinix / itel">
+                    MDM Tecno / Infinix / itel — 15 000 FCFA
+                </option>
+                <option value="FRP Samsung Android 16-17">
+                    FRP Samsung Android 16-17 — 25 000 FCFA
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="imei">IMEI</label>
+
+            <input
+                type="text"
+                id="imei"
+                inputmode="numeric"
+                maxlength="15"
+                pattern="[0-9]{15}"
+                placeholder="Entrez les 15 chiffres de l'IMEI"
+                required
+            >
+
+            <div class="imei-note">
+                L'IMEI doit contenir exactement 15 chiffres.
             </div>
+        </div>
 
-            <div class="form-group">
-                <label for="contact">WhatsApp / Phone</label>
+        <div class="form-group">
+            <label for="device">Appareil / Modèle</label>
 
-                <input
-                    type="tel"
-                    id="contact"
-                    placeholder="Enter your WhatsApp or phone number"
-                    required>
-            </div>
+            <input
+                type="text"
+                id="device"
+                placeholder="Exemple : Samsung Galaxy A16"
+                required
+            >
+        </div>
 
-            <div class="form-group">
-                <label for="service">Service</label>
+        <div class="form-group">
+            <label for="message">Décrivez votre demande</label>
 
-                <select id="service" required>
+            <textarea
+                id="message"
+                placeholder="Décrivez brièvement votre demande..."
+            ></textarea>
+        </div>
 
-                    <option value="">Select a service</option>
+        <button type="submit" class="submit-btn">
+            📱 Envoyer la commande sur WhatsApp
+        </button>
 
-                    <option value="IMEI Service">
-                        IMEI Service
-                    </option>
-
-                    <option value="Network Service">
-                        Network Service
-                    </option>
-
-                    <option value="iCloud Service">
-                        iCloud Service
-                    </option>
-
-                    <option value="Server Service">
-                        Server Service
-                    </option>
-
-                    <option value="Digital Tools">
-                        Digital Tools
-                    </option>
-
-                    <option value="Activation Service">
-                        Activation Service
-                    </option>
-
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="device">Device / Model</label>
-
-                <input
-                    type="text"
-                    id="device"
-                    placeholder="Example: Samsung Galaxy S23">
-            </div>
-
-            <div class="form-group">
-                <label for="message">Describe your request</label>
-
-                <textarea
-                    id="message"
-                    placeholder="Describe the service you need"></textarea>
-            </div>
-
-            <button type="submit" class="submit-btn">
-                Submit Order on WhatsApp
-            </button>
-
-        </form>
-
-    </div>
+    </form>
 
 </main>
 
@@ -190,35 +186,33 @@
     <p>© 2026 PLUS-TECH.COM. All rights reserved.</p>
 </footer>
 
-
 <script>
-
-document.getElementById("orderForm").addEventListener("submit", function(event) {
+function sendWhatsApp(event) {
 
     event.preventDefault();
 
     const name = document.getElementById("name").value;
-    const contact = document.getElementById("contact").value;
+    const phone = document.getElementById("phone").value;
     const service = document.getElementById("service").value;
+    const imei = document.getElementById("imei").value;
     const device = document.getElementById("device").value;
     const message = document.getElementById("message").value;
 
     const whatsappMessage =
         "Bonjour PLUS-TECH.COM,%0A%0A" +
         "*Nouvelle demande de service*%0A%0A" +
-        "*Nom:* " + encodeURIComponent(name) + "%0A" +
-        "*WhatsApp / Téléphone:* " + encodeURIComponent(contact) + "%0A" +
-        "*Service:* " + encodeURIComponent(service) + "%0A" +
-        "*Appareil:* " + encodeURIComponent(device) + "%0A" +
-        "*Demande:* " + encodeURIComponent(message);
+        "*Nom:* " + name + "%0A" +
+        "*WhatsApp / Téléphone:* " + phone + "%0A" +
+        "*Service:* " + service + "%0A" +
+        "*IMEI:* " + imei + "%0A" +
+        "*Appareil:* " + device + "%0A" +
+        "*Demande:* " + message;
 
     const whatsappURL =
         "https://wa.me/23672089545?text=" + whatsappMessage;
 
     window.open(whatsappURL, "_blank");
-
-});
-
+}
 </script>
 
 </body>
