@@ -89,6 +89,24 @@
             text-decoration: none;
             font-weight: bold;
         }
+
+        #result {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 8px;
+            display: none;
+            text-align: center;
+        }
+
+        .success {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #842029;
+        }
     </style>
 </head>
 
@@ -110,7 +128,7 @@
         Remplissez les informations de votre appareil.
     </p>
 
-    <form class="order-form" onsubmit="sendWhatsApp(event)">
+    <form class="order-form" id="orderForm">
 
         <div class="form-group">
             <label for="name">Nom complet</label>
@@ -177,8 +195,10 @@
         </div>
 
         <button type="submit" class="submit-btn">
-            📱 Envoyer la commande sur WhatsApp
+            📱 Envoyer la commande
         </button>
+
+        <div id="result"></div>
 
     </form>
 
@@ -188,50 +208,249 @@
     <p>© 2026 PLUS-TECH.COM. Tous droits réservés.</p>
 </footer>
 
+
 <script>
-    /* Récupérer automatiquement le service choisi */
-    const params = new URLSearchParams(window.location.search);
-    const selectedService = params.get("service");
 
-    if (selectedService) {
-        const serviceSelect = document.getElementById("service");
+/*
+    =====================================================
+    CONFIGURATION SUPABASE
+    =====================================================
 
-        for (let option of serviceSelect.options) {
-            if (option.value === selectedService) {
-                serviceSelect.value = selectedService;
-                break;
-            }
+    IMPORTANT :
+    Remplace seulement les deux valeurs ci-dessous
+    par ton API URL et ta Publishable key.
+
+    N'utilise PAS une clé secret ou service_role.
+*/
+
+const SUPABASE_URL = "https://bmwtivvdrupshuselftd.supabase.co/rest/v1/";
+const SUPABASE_KEY = "sb_publishable_MsfE7VdvEr9Ax0H4YrA5KQ_8_Ho-JZf";
+
+
+/*
+    Récupérer automatiquement le service choisi
+*/
+
+const params = new URLSearchParams(window.location.search);
+
+const selectedService = params.get("service");
+
+if (selectedService) {
+
+    const serviceSelect = document.getElementById("service");
+
+    for (let option of serviceSelect.options) {
+
+        if (option.value === selectedService) {
+
+            serviceSelect.value = selectedService;
+
+            break;
         }
     }
+}
 
-    /* Envoyer la commande sur WhatsApp */
-    function sendWhatsApp(event) {
 
-        event.preventDefault();
+/*
+    Envoyer la commande
+*/
 
-        const name = document.getElementById("name").value;
-        const phone = document.getElementById("phone").value;
-        const service = document.getElementById("service").value;
-        const imei = document.getElementById("imei").value;
-        const device = document.getElementById("device").value;
-        const message = document.getElementById("message").value;
+document.getElementById("orderForm").addEventListener("submit", async function(event) {
 
-        const text =
+    event.preventDefault();
+
+    const result = document.getElementById("result");
+
+    result.style.display = "none";
+
+    const name =
+        document.getElementById("name").value.trim();
+
+    const phone =
+        document.getElementById("phone").value.trim();
+
+    const service =
+        document.getElementById("service").value;
+
+    const imei =
+        document.getElementById("imei").value.trim();
+
+    const device =
+        document.getElementById("device").value.trim();
+
+    const message =
+        document.getElementById("message").value.trim();
+
+
+    /*
+        Vérification IMEI
+    */
+
+    if (!/^[0-9]{15}$/.test(imei)) {
+
+        result.className = "error";
+
+        result.textContent =
+            "L'IMEI doit contenir exactement 15 chiffres.";
+
+        result.style.display = "block";
+
+        return;
+    }
+
+
+    /*
+        Données envoyées à Supabase
+    */
+
+    const orderData = {
+
+        full_name: name,
+
+        phone: phone,
+
+        service: service,
+
+        imei: imei,
+
+        device: device,
+
+        request: message,
+
+        status: "Nouvelle"
+
+    };
+
+
+    try {
+
+        /*
+            Enregistrement dans Supabase
+        */
+
+        const response = await fetch(
+            SUPABASE_URL + "/rest/v1/orders",
+            {
+
+                method: "POST",
+
+                headers: {
+
+                    "Content-Type": "application/json",
+
+                    "apikey": SUPABASE_KEY,
+
+                    "Authorization":
+                        "Bearer " + SUPABASE_KEY,
+
+                    "Prefer": "return=minimal"
+
+                },
+
+                body: JSON.stringify(orderData)
+
+            }
+        );
+
+
+        /*
+            Vérification de la réponse
+        */
+
+        if (!response.ok) {
+
+            const errorText =
+                await response.text();
+
+            console.error(errorText);
+
+            throw new Error(
+                "Impossible d'enregistrer la commande."
+            );
+        }
+
+
+        /*
+            Message WhatsApp
+        */
+
+        const whatsappMessage =
+
             "Bonjour PLUS-TECH.COM,\n\n" +
+
             "Nouvelle demande de service\n\n" +
+
             "Nom : " + name + "\n" +
+
             "WhatsApp / Téléphone : " + phone + "\n" +
+
             "Service : " + service + "\n" +
+
             "IMEI : " + imei + "\n" +
+
             "Appareil : " + device + "\n" +
-            "Demande : " + message;
+
+            "Demande : " + message + "\n\n" +
+
+            "Statut : Nouvelle";
+
 
         const whatsappURL =
-            "https://wa.me/23672089545?text=" +
-            encodeURIComponent(text);
 
-        window.open(whatsappURL, "_blank");
+            "https://wa.me/23672089545?text=" +
+
+            encodeURIComponent(whatsappMessage);
+
+
+        /*
+            Confirmation
+        */
+
+        result.className = "success";
+
+        result.textContent =
+            "✅ Commande enregistrée avec succès. Ouverture de WhatsApp...";
+
+        result.style.display = "block";
+
+
+        /*
+            Ouvrir WhatsApp
+        */
+
+        setTimeout(function() {
+
+            window.open(
+                whatsappURL,
+                "_blank"
+            );
+
+        }, 500);
+
+
+        /*
+            Réinitialiser le formulaire
+        */
+
+        document.getElementById("orderForm").reset();
+
     }
+
+    catch (error) {
+
+        console.error(error);
+
+        result.className = "error";
+
+        result.textContent =
+            "❌ Une erreur est survenue. Vérifiez la configuration Supabase.";
+
+        result.style.display = "block";
+
+    }
+
+});
+
 </script>
 
 </body>
