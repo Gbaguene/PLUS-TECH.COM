@@ -100,7 +100,7 @@
 
 <main class="order-container">
 
-    <a href="imei-service.html" class="back-link">
+    <a href="service-imei.html" class="back-link">
         ← Retour aux services IMEI
     </a>
 
@@ -127,9 +127,11 @@
 
             <select id="service" required>
                 <option value="">-- Sélectionnez un service --</option>
+
                 <option value="MDM Tecno / Infinix / itel">
                     MDM Tecno / Infinix / itel — 15 000 FCFA
                 </option>
+
                 <option value="FRP Samsung Android 16-17">
                     FRP Samsung Android 16-17 — 25 000 FCFA
                 </option>
@@ -187,6 +189,23 @@
 </footer>
 
 <script>
+/* Sélection automatique du service */
+const params = new URLSearchParams(window.location.search);
+const selectedService = params.get("service");
+
+if (selectedService) {
+    const serviceSelect = document.getElementById("service");
+
+    for (let option of serviceSelect.options) {
+        if (option.value === selectedService) {
+            serviceSelect.value = selectedService;
+            break;
+        }
+    }
+}
+
+
+/* Envoi de la commande sur WhatsApp */
 function sendWhatsApp(event) {
 
     event.preventDefault();
