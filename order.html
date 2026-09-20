@@ -92,10 +92,10 @@
 
         #result {
             margin-top: 20px;
-            padding: 12px;
+            padding: 14px;
             border-radius: 8px;
             display: none;
-            text-align: center;
+            word-break: break-word;
         }
 
         .success {
@@ -132,19 +132,32 @@
 
         <div class="form-group">
             <label for="name">Nom complet</label>
-            <input type="text" id="name" placeholder="Votre nom" required>
+            <input
+                type="text"
+                id="name"
+                placeholder="Votre nom"
+                required
+            >
         </div>
 
         <div class="form-group">
             <label for="phone">WhatsApp / Téléphone</label>
-            <input type="tel" id="phone" placeholder="Votre numéro" required>
+            <input
+                type="tel"
+                id="phone"
+                placeholder="Votre numéro"
+                required
+            >
         </div>
 
         <div class="form-group">
             <label for="service">Service</label>
 
             <select id="service" required>
-                <option value="">-- Sélectionnez un service --</option>
+
+                <option value="">
+                    -- Sélectionnez un service --
+                </option>
 
                 <option value="MDM Tecno / Infinix / itel">
                     MDM Tecno / Infinix / itel — 15 000 FCFA
@@ -153,11 +166,15 @@
                 <option value="FRP Samsung Android 16-17">
                     FRP Samsung Android 16-17 — 25 000 FCFA
                 </option>
+
             </select>
         </div>
 
         <div class="form-group">
-            <label for="imei">IMEI</label>
+
+            <label for="imei">
+                IMEI
+            </label>
 
             <input
                 type="text"
@@ -172,10 +189,14 @@
             <div class="imei-note">
                 L'IMEI doit contenir exactement 15 chiffres.
             </div>
+
         </div>
 
         <div class="form-group">
-            <label for="device">Appareil / Modèle</label>
+
+            <label for="device">
+                Appareil / Modèle
+            </label>
 
             <input
                 type="text"
@@ -183,18 +204,27 @@
                 placeholder="Exemple : Samsung Galaxy A16"
                 required
             >
+
         </div>
 
         <div class="form-group">
-            <label for="message">Décrivez votre demande</label>
+
+            <label for="message">
+                Décrivez votre demande
+            </label>
 
             <textarea
                 id="message"
                 placeholder="Décrivez brièvement votre demande..."
             ></textarea>
+
         </div>
 
-        <button type="submit" class="submit-btn">
+        <button
+            type="submit"
+            class="submit-btn"
+            id="submitBtn"
+        >
             📱 Envoyer la commande
         </button>
 
@@ -205,45 +235,64 @@
 </main>
 
 <footer>
-    <p>© 2026 PLUS-TECH.COM. Tous droits réservés.</p>
+    <p>
+        © 2026 PLUS-TECH.COM. Tous droits réservés.
+    </p>
 </footer>
 
 
 <script>
 
-/*
-    =====================================================
-    CONFIGURATION SUPABASE
-    =====================================================
-
-    IMPORTANT :
-    Remplace seulement les deux valeurs ci-dessous
-    par ton API URL et ta Publishable key.
-
-    N'utilise PAS une clé secret ou service_role.
-*/
-
-const SUPABASE_URL = "https://bmwtivvdrupshuselftd.supabase.co/rest/v1/";
-const SUPABASE_KEY = "sb_publishable_MsfE7VdvEr9Ax0H4YrA5KQ_8_Ho-JZf";
-
+/* =====================================================
+   CONFIGURATION SUPABASE
+   ===================================================== */
 
 /*
-    Récupérer automatiquement le service choisi
+   IMPORTANT :
+
+   Mets ici ton API URL Supabase.
+
+   Ton API URL que tu as trouvée est :
+
+   https://bmwtivvdrupshuselftd.supabase.co/rest/v1/
 */
 
-const params = new URLSearchParams(window.location.search);
+const SUPABASE_URL =
+    "https://bmwtivvdrupshuselftd.supabase.co/rest/v1/";
 
-const selectedService = params.get("service");
+
+/*
+   Mets ici TA Publishable key.
+
+   Ne mets PAS une clé secret ou service_role.
+*/
+
+const SUPABASE_KEY =
+    "sb_publishable_MsfE7VdvEr9Ax0H4YrA5KQ_8_Ho-JZf";
+
+
+/* =====================================================
+   SERVICE AUTOMATIQUE
+   ===================================================== */
+
+const params =
+    new URLSearchParams(window.location.search);
+
+const selectedService =
+    params.get("service");
+
 
 if (selectedService) {
 
-    const serviceSelect = document.getElementById("service");
+    const serviceSelect =
+        document.getElementById("service");
 
     for (let option of serviceSelect.options) {
 
         if (option.value === selectedService) {
 
-            serviceSelect.value = selectedService;
+            serviceSelect.value =
+                selectedService;
 
             break;
         }
@@ -251,205 +300,281 @@ if (selectedService) {
 }
 
 
-/*
-    Envoyer la commande
-*/
+/* =====================================================
+   FORMULAIRE
+   ===================================================== */
 
-document.getElementById("orderForm").addEventListener("submit", async function(event) {
+const orderForm =
+    document.getElementById("orderForm");
 
-    event.preventDefault();
+const result =
+    document.getElementById("result");
 
-    const result = document.getElementById("result");
-
-    result.style.display = "none";
-
-    const name =
-        document.getElementById("name").value.trim();
-
-    const phone =
-        document.getElementById("phone").value.trim();
-
-    const service =
-        document.getElementById("service").value;
-
-    const imei =
-        document.getElementById("imei").value.trim();
-
-    const device =
-        document.getElementById("device").value.trim();
-
-    const message =
-        document.getElementById("message").value.trim();
+const submitBtn =
+    document.getElementById("submitBtn");
 
 
-    /*
-        Vérification IMEI
-    */
+orderForm.addEventListener(
+    "submit",
+    async function(event) {
 
-    if (!/^[0-9]{15}$/.test(imei)) {
+        event.preventDefault();
 
-        result.className = "error";
+        result.style.display = "none";
 
-        result.textContent =
-            "L'IMEI doit contenir exactement 15 chiffres.";
+        submitBtn.disabled = true;
 
-        result.style.display = "block";
-
-        return;
-    }
+        submitBtn.textContent =
+            "⏳ Enregistrement...";
 
 
-    /*
-        Données envoyées à Supabase
-    */
+        try {
 
-    const orderData = {
+            /* Récupération des informations */
 
-        full_name: name,
+            const name =
+                document
+                .getElementById("name")
+                .value
+                .trim();
 
-        phone: phone,
+            const phone =
+                document
+                .getElementById("phone")
+                .value
+                .trim();
 
-        service: service,
+            const service =
+                document
+                .getElementById("service")
+                .value;
 
-        imei: imei,
+            const imei =
+                document
+                .getElementById("imei")
+                .value
+                .trim();
 
-        device: device,
+            const device =
+                document
+                .getElementById("device")
+                .value
+                .trim();
 
-        request: message,
+            const message =
+                document
+                .getElementById("message")
+                .value
+                .trim();
 
-        status: "Nouvelle"
 
-    };
+            /* Vérification IMEI */
 
+            if (!/^[0-9]{15}$/.test(imei)) {
 
-    try {
-
-        /*
-            Enregistrement dans Supabase
-        */
-
-        const response = await fetch(
-            SUPABASE_URL + "/rest/v1/orders",
-            {
-
-                method: "POST",
-
-                headers: {
-
-                    "Content-Type": "application/json",
-
-                    "apikey": SUPABASE_KEY,
-
-                    "Authorization":
-                        "Bearer " + SUPABASE_KEY,
-
-                    "Prefer": "return=minimal"
-
-                },
-
-                body: JSON.stringify(orderData)
+                throw new Error(
+                    "L'IMEI doit contenir exactement 15 chiffres."
+                );
 
             }
-        );
 
 
-        /*
-            Vérification de la réponse
-        */
+            /* Données à enregistrer */
 
-        if (!response.ok) {
+            const orderData = {
 
-            const errorText =
+                full_name: name,
+
+                phone: phone,
+
+                service: service,
+
+                imei: imei,
+
+                device: device,
+
+                request: message,
+
+                status: "Nouvelle"
+
+            };
+
+
+            /* =================================================
+               ENVOI À SUPABASE
+               ================================================= */
+
+            const response =
+                await fetch(
+                    SUPABASE_URL + "orders",
+                    {
+
+                        method: "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json",
+
+                            "apikey":
+                                SUPABASE_KEY,
+
+                            "Authorization":
+                                "Bearer " +
+                                SUPABASE_KEY,
+
+                            "Prefer":
+                                "return=minimal"
+
+                        },
+
+                        body:
+                            JSON.stringify(orderData)
+
+                    }
+                );
+
+
+            /* Lire la réponse */
+
+            const responseText =
                 await response.text();
 
-            console.error(errorText);
 
-            throw new Error(
-                "Impossible d'enregistrer la commande."
+            /* Vérifier l'erreur */
+
+            if (!response.ok) {
+
+                console.error(
+                    "Supabase:",
+                    responseText
+                );
+
+                throw new Error(
+                    "Supabase (" +
+                    response.status +
+                    ") : " +
+                    responseText
+                );
+
+            }
+
+
+            /* =================================================
+               WHATSAPP
+               ================================================= */
+
+            const whatsappMessage =
+
+                "Bonjour PLUS-TECH.COM,\n\n" +
+
+                "Nouvelle demande de service\n\n" +
+
+                "Nom : " +
+                name +
+                "\n" +
+
+                "WhatsApp / Téléphone : " +
+                phone +
+                "\n" +
+
+                "Service : " +
+                service +
+                "\n" +
+
+                "IMEI : " +
+                imei +
+                "\n" +
+
+                "Appareil : " +
+                device +
+                "\n" +
+
+                "Demande : " +
+                message +
+                "\n\n" +
+
+                "Statut : Nouvelle";
+
+
+            const whatsappURL =
+
+                "https://wa.me/23672089545?text=" +
+
+                encodeURIComponent(
+                    whatsappMessage
+                );
+
+
+            /* Message de succès */
+
+            result.className =
+                "success";
+
+            result.textContent =
+                "✅ Commande enregistrée avec succès. Ouverture de WhatsApp...";
+
+            result.style.display =
+                "block";
+
+
+            /* Ouvrir WhatsApp */
+
+            setTimeout(
+                function() {
+
+                    window.open(
+                        whatsappURL,
+                        "_blank"
+                    );
+
+                },
+                500
             );
+
+
+            /* Réinitialiser */
+
+            orderForm.reset();
+
         }
 
 
-        /*
-            Message WhatsApp
-        */
+        catch (error) {
 
-        const whatsappMessage =
-
-            "Bonjour PLUS-TECH.COM,\n\n" +
-
-            "Nouvelle demande de service\n\n" +
-
-            "Nom : " + name + "\n" +
-
-            "WhatsApp / Téléphone : " + phone + "\n" +
-
-            "Service : " + service + "\n" +
-
-            "IMEI : " + imei + "\n" +
-
-            "Appareil : " + device + "\n" +
-
-            "Demande : " + message + "\n\n" +
-
-            "Statut : Nouvelle";
-
-
-        const whatsappURL =
-
-            "https://wa.me/23672089545?text=" +
-
-            encodeURIComponent(whatsappMessage);
-
-
-        /*
-            Confirmation
-        */
-
-        result.className = "success";
-
-        result.textContent =
-            "✅ Commande enregistrée avec succès. Ouverture de WhatsApp...";
-
-        result.style.display = "block";
-
-
-        /*
-            Ouvrir WhatsApp
-        */
-
-        setTimeout(function() {
-
-            window.open(
-                whatsappURL,
-                "_blank"
+            console.error(
+                "Erreur complète :",
+                error
             );
 
-        }, 500);
+
+            result.className =
+                "error";
 
 
-        /*
-            Réinitialiser le formulaire
-        */
+            result.textContent =
+                "❌ " +
+                error.message;
 
-        document.getElementById("orderForm").reset();
+
+            result.style.display =
+                "block";
+
+        }
+
+
+        finally {
+
+            submitBtn.disabled =
+                false;
+
+            submitBtn.textContent =
+                "📱 Envoyer la commande";
+
+        }
 
     }
-
-    catch (error) {
-
-        console.error(error);
-
-        result.className = "error";
-
-        result.textContent =
-            "❌ Une erreur est survenue. Vérifiez la configuration Supabase.";
-
-        result.style.display = "block";
-
-    }
-
-});
+);
 
 </script>
 
