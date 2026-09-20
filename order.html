@@ -20,7 +20,7 @@
             color: #0b1f3a;
         }
 
-        .order-container p {
+        .order-container > p {
             text-align: center;
             color: #666;
             margin-bottom: 30px;
@@ -100,7 +100,7 @@
 
 <main class="order-container">
 
-    <a href="service-imei.html" class="back-link">
+    <a href="imei-service.html" class="back-link">
         ← Retour aux services IMEI
     </a>
 
@@ -114,12 +114,12 @@
 
         <div class="form-group">
             <label for="name">Nom complet</label>
-            <input type="text" id="name" required>
+            <input type="text" id="name" placeholder="Votre nom" required>
         </div>
 
         <div class="form-group">
             <label for="phone">WhatsApp / Téléphone</label>
-            <input type="tel" id="phone" required>
+            <input type="tel" id="phone" placeholder="Votre numéro" required>
         </div>
 
         <div class="form-group">
@@ -185,53 +185,53 @@
 </main>
 
 <footer>
-    <p>© 2026 PLUS-TECH.COM. All rights reserved.</p>
+    <p>© 2026 PLUS-TECH.COM. Tous droits réservés.</p>
 </footer>
 
 <script>
-/* Sélection automatique du service */
-const params = new URLSearchParams(window.location.search);
-const selectedService = params.get("service");
+    /* Récupérer automatiquement le service choisi */
+    const params = new URLSearchParams(window.location.search);
+    const selectedService = params.get("service");
 
-if (selectedService) {
-    const serviceSelect = document.getElementById("service");
+    if (selectedService) {
+        const serviceSelect = document.getElementById("service");
 
-    for (let option of serviceSelect.options) {
-        if (option.value === selectedService) {
-            serviceSelect.value = selectedService;
-            break;
+        for (let option of serviceSelect.options) {
+            if (option.value === selectedService) {
+                serviceSelect.value = selectedService;
+                break;
+            }
         }
     }
-}
 
+    /* Envoyer la commande sur WhatsApp */
+    function sendWhatsApp(event) {
 
-/* Envoi de la commande sur WhatsApp */
-function sendWhatsApp(event) {
+        event.preventDefault();
 
-    event.preventDefault();
+        const name = document.getElementById("name").value;
+        const phone = document.getElementById("phone").value;
+        const service = document.getElementById("service").value;
+        const imei = document.getElementById("imei").value;
+        const device = document.getElementById("device").value;
+        const message = document.getElementById("message").value;
 
-    const name = document.getElementById("name").value;
-    const phone = document.getElementById("phone").value;
-    const service = document.getElementById("service").value;
-    const imei = document.getElementById("imei").value;
-    const device = document.getElementById("device").value;
-    const message = document.getElementById("message").value;
+        const text =
+            "Bonjour PLUS-TECH.COM,\n\n" +
+            "Nouvelle demande de service\n\n" +
+            "Nom : " + name + "\n" +
+            "WhatsApp / Téléphone : " + phone + "\n" +
+            "Service : " + service + "\n" +
+            "IMEI : " + imei + "\n" +
+            "Appareil : " + device + "\n" +
+            "Demande : " + message;
 
-    const whatsappMessage =
-        "Bonjour PLUS-TECH.COM,%0A%0A" +
-        "*Nouvelle demande de service*%0A%0A" +
-        "*Nom:* " + name + "%0A" +
-        "*WhatsApp / Téléphone:* " + phone + "%0A" +
-        "*Service:* " + service + "%0A" +
-        "*IMEI:* " + imei + "%0A" +
-        "*Appareil:* " + device + "%0A" +
-        "*Demande:* " + message;
+        const whatsappURL =
+            "https://wa.me/23672089545?text=" +
+            encodeURIComponent(text);
 
-    const whatsappURL =
-        "https://wa.me/23672089545?text=" + whatsappMessage;
-
-    window.open(whatsappURL, "_blank");
-}
+        window.open(whatsappURL, "_blank");
+    }
 </script>
 
 </body>
