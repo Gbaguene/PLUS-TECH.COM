@@ -29,8 +29,8 @@
     }
 
     .container {
-      max-width: 600px;
-      margin: 35px auto;
+      max-width: 1200px;
+      margin: 30px auto;
       padding: 15px;
     }
 
@@ -42,14 +42,13 @@
     }
 
     h2 {
-      text-align: center;
       color: #0b5ed7;
       margin-top: 0;
     }
 
     label {
       display: block;
-      margin-top: 16px;
+      margin-top: 15px;
       margin-bottom: 6px;
       font-weight: bold;
     }
@@ -63,14 +62,11 @@
     }
 
     button {
-      width: 100%;
-      margin-top: 22px;
-      padding: 14px;
+      padding: 12px 18px;
       border: 0;
       border-radius: 8px;
       background: #0b5ed7;
       color: white;
-      font-size: 16px;
       font-weight: bold;
       cursor: pointer;
     }
@@ -79,12 +75,36 @@
       background: #777;
     }
 
+    .login-button {
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    .logout {
+      background: #dc3545;
+      float: right;
+    }
+
+    .refresh {
+      margin-bottom: 20px;
+    }
+
+    #loginPanel {
+      max-width: 600px;
+      margin: auto;
+    }
+
+    #adminPanel {
+      display: none;
+    }
+
     #message {
       margin-top: 18px;
-      padding: 12px;
+      padding: 13px;
       border-radius: 8px;
       display: none;
       white-space: pre-wrap;
+      word-break: break-word;
     }
 
     .error {
@@ -99,20 +119,73 @@
       color: #0f5132;
     }
 
-    #adminPanel {
-      display: none;
+    .table-container {
+      overflow-x: auto;
+      margin-top: 20px;
     }
 
-    .logout {
-      background: #dc3545;
+    table {
+      width: 100%;
+      min-width: 950px;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #0b5ed7;
+      color: white;
+    }
+
+    tr:hover {
+      background: #f5f8ff;
+    }
+
+    .status {
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    .empty {
+      text-align: center;
+      padding: 30px;
+      color: #666;
+    }
+
+    .top-bar {
+      overflow: hidden;
       margin-bottom: 20px;
     }
 
-    .info {
-      background: #e7f1ff;
-      padding: 15px;
-      border-radius: 8px;
-      margin-bottom: 20px;
+    .top-bar h2 {
+      display: inline-block;
+      margin: 0;
+    }
+
+    .date {
+      white-space: nowrap;
+    }
+
+    @media (max-width: 700px) {
+      .card {
+        padding: 18px;
+      }
+
+      .top-bar h2 {
+        display: block;
+        margin-bottom: 15px;
+      }
+
+      .logout {
+        float: none;
+        width: 100%;
+      }
     }
   </style>
 </head>
@@ -134,6 +207,7 @@
     <form id="loginForm">
 
       <label for="email">Adresse e-mail</label>
+
       <input
         type="email"
         id="email"
@@ -142,6 +216,7 @@
       >
 
       <label for="password">Mot de passe</label>
+
       <input
         type="password"
         id="password"
@@ -149,7 +224,11 @@
         required
       >
 
-      <button type="submit" id="loginButton">
+      <button
+        type="submit"
+        class="login-button"
+        id="loginButton"
+      >
         Se connecter
       </button>
 
@@ -163,23 +242,60 @@
   <!-- ESPACE ADMIN -->
   <div class="card" id="adminPanel">
 
-    <h2>📋 Tableau de bord</h2>
+    <div class="top-bar">
 
-    <div class="info">
-      Bienvenue dans l'espace d'administration de PLUS-TECH.COM.
+      <button
+        class="logout"
+        id="logoutButton"
+      >
+        Se déconnecter
+      </button>
+
+      <h2>📋 Gestion des commandes</h2>
+
     </div>
 
-    <p>
-      🔐 Connexion administrateur réussie.
-    </p>
-
-    <p>
-      La gestion des commandes sera ajoutée à l'étape suivante.
-    </p>
-
-    <button class="logout" id="logoutButton">
-      Se déconnecter
+    <button
+      class="refresh"
+      id="refreshButton"
+    >
+      🔄 Actualiser les commandes
     </button>
+
+    <div id="ordersMessage"></div>
+
+    <div class="table-container">
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>Date</th>
+            <th>Nom</th>
+            <th>Téléphone</th>
+            <th>Service</th>
+            <th>IMEI</th>
+            <th>Appareil</th>
+            <th>Demande</th>
+            <th>Statut</th>
+          </tr>
+
+        </thead>
+
+        <tbody id="ordersBody">
+
+          <tr>
+            <td colspan="8" class="empty">
+              Chargement des commandes...
+            </td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
 
   </div>
 
@@ -213,6 +329,12 @@ const loginButton =
 const logoutButton =
   document.getElementById("logoutButton");
 
+const refreshButton =
+  document.getElementById("refreshButton");
+
+const ordersBody =
+  document.getElementById("ordersBody");
+
 
 function showMessage(text, type) {
 
@@ -223,102 +345,309 @@ function showMessage(text, type) {
 }
 
 
-loginForm.addEventListener("submit", async function(event) {
+function showOrdersMessage(text, type) {
 
-  event.preventDefault();
+  const box =
+    document.getElementById("ordersMessage");
 
-  const email =
-    document.getElementById("email").value.trim();
+  box.textContent = text;
+  box.className = type;
+  box.style.display = "block";
 
-  const password =
-    document.getElementById("password").value;
+}
 
-  if (SUPABASE_KEY === "COLLE_ICI_TA_PUBLISHABLE_KEY") {
 
-    showMessage(
-      "❌ La Publishable key Supabase n'a pas encore été ajoutée.",
-      "error"
-    );
+function escapeHTML(value) {
 
+  if (value === null || value === undefined) {
+    return "";
+  }
+
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+}
+
+
+async function loadOrders() {
+
+  const accessToken =
+    localStorage.getItem("plusTechAccessToken");
+
+  if (!accessToken) {
     return;
   }
 
-  loginButton.disabled = true;
-  loginButton.textContent = "⏳ Connexion...";
+  ordersBody.innerHTML = `
+    <tr>
+      <td colspan="8" class="empty">
+        ⏳ Chargement des commandes...
+      </td>
+    </tr>
+  `;
+
+  refreshButton.disabled = true;
+  refreshButton.textContent = "⏳ Chargement...";
 
   try {
 
     const response = await fetch(
-      SUPABASE_URL + "/auth/v1/token?grant_type=password",
+      SUPABASE_URL +
+      "/rest/v1/orders?select=*&order=created_at.desc",
       {
-        method: "POST",
+        method: "GET",
 
         headers: {
-          "Content-Type": "application/json",
-          "apikey": SUPABASE_KEY
-        },
-
-        body: JSON.stringify({
-          email: email,
-          password: password
-        })
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + accessToken
+        }
       }
     );
 
-    const data = await response.json();
+    const responseText =
+      await response.text();
 
     if (!response.ok) {
 
       throw new Error(
-        data.error_description ||
-        data.msg ||
-        data.message ||
-        "Identifiants incorrects."
+        "Supabase (" +
+        response.status +
+        ") : " +
+        responseText
       );
 
     }
 
-    localStorage.setItem(
-      "plusTechAccessToken",
-      data.access_token
-    );
+    const orders =
+      JSON.parse(responseText);
 
-    loginPanel.style.display = "none";
-    adminPanel.style.display = "block";
+    if (!orders.length) {
+
+      ordersBody.innerHTML = `
+        <tr>
+          <td colspan="8" class="empty">
+            📭 Aucune commande enregistrée.
+          </td>
+        </tr>
+      `;
+
+      return;
+    }
+
+    ordersBody.innerHTML =
+      orders.map(function(order) {
+
+        const date =
+          order.created_at
+            ? new Date(order.created_at)
+                .toLocaleString("fr-FR")
+            : "—";
+
+        return `
+          <tr>
+
+            <td class="date">
+              ${escapeHTML(date)}
+            </td>
+
+            <td>
+              ${escapeHTML(order.full_name || "—")}
+            </td>
+
+            <td>
+              ${escapeHTML(order.phone || "—")}
+            </td>
+
+            <td>
+              ${escapeHTML(order.service || "—")}
+            </td>
+
+            <td>
+              ${escapeHTML(order.imei || "—")}
+            </td>
+
+            <td>
+              ${escapeHTML(order.device || "—")}
+            </td>
+
+            <td>
+              ${escapeHTML(order.request || "—")}
+            </td>
+
+            <td class="status">
+              ${escapeHTML(order.status || "Nouvelle")}
+            </td>
+
+          </tr>
+        `;
+
+      }).join("");
 
   } catch (error) {
 
-    showMessage(
-      "❌ " + error.message,
-      "error"
-    );
+    console.error(error);
+
+    ordersBody.innerHTML = `
+      <tr>
+        <td colspan="8" class="empty">
+          ❌ Impossible de charger les commandes.
+          <br><br>
+          ${escapeHTML(error.message)}
+        </td>
+      </tr>
+    `;
 
   } finally {
 
-    loginButton.disabled = false;
-    loginButton.textContent = "Se connecter";
+    refreshButton.disabled = false;
+    refreshButton.textContent =
+      "🔄 Actualiser les commandes";
 
   }
 
-});
+}
 
 
-logoutButton.addEventListener("click", function() {
+loginForm.addEventListener(
+  "submit",
+  async function(event) {
 
-  localStorage.removeItem("plusTechAccessToken");
+    event.preventDefault();
 
-  adminPanel.style.display = "none";
-  loginPanel.style.display = "block";
+    const email =
+      document.getElementById("email")
+        .value.trim();
 
-  loginForm.reset();
+    const password =
+      document.getElementById("password")
+        .value;
 
-});
+    if (
+      SUPABASE_KEY ===
+      "COLLE_ICI_TA_PUBLISHABLE_KEY"
+    ) {
+
+      showMessage(
+        "❌ La Publishable key Supabase n'a pas été ajoutée.",
+        "error"
+      );
+
+      return;
+    }
+
+    loginButton.disabled = true;
+    loginButton.textContent =
+      "⏳ Connexion...";
+
+    try {
+
+      const response = await fetch(
+        SUPABASE_URL +
+        "/auth/v1/token?grant_type=password",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json",
+            "apikey": SUPABASE_KEY
+          },
+
+          body: JSON.stringify({
+            email: email,
+            password: password
+          })
+        }
+      );
+
+      const data =
+        await response.json();
+
+      if (!response.ok) {
+
+        throw new Error(
+          data.error_description ||
+          data.msg ||
+          data.message ||
+          "Identifiants incorrects."
+        );
+
+      }
+
+      localStorage.setItem(
+        "plusTechAccessToken",
+        data.access_token
+      );
+
+      loginPanel.style.display =
+        "none";
+
+      adminPanel.style.display =
+        "block";
+
+      await loadOrders();
+
+    } catch (error) {
+
+      showMessage(
+        "❌ " + error.message,
+        "error"
+      );
+
+    } finally {
+
+      loginButton.disabled = false;
+      loginButton.textContent =
+        "Se connecter";
+
+    }
+
+  }
+);
 
 
-if (localStorage.getItem("plusTechAccessToken")) {
+refreshButton.addEventListener(
+  "click",
+  loadOrders
+);
 
-  loginPanel.style.display = "none";
-  adminPanel.style.display = "block";
+
+logoutButton.addEventListener(
+  "click",
+  function() {
+
+    localStorage.removeItem(
+      "plusTechAccessToken"
+    );
+
+    adminPanel.style.display =
+      "none";
+
+    loginPanel.style.display =
+      "block";
+
+    loginForm.reset();
+
+  }
+);
+
+
+if (
+  localStorage.getItem(
+    "plusTechAccessToken"
+  )
+) {
+
+  loginPanel.style.display =
+    "none";
+
+  adminPanel.style.display =
+    "block";
+
+  loadOrders();
 
 }
 
