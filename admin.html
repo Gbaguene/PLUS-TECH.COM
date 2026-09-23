@@ -73,6 +73,7 @@
 
     button:disabled {
       background: #777;
+      cursor: not-allowed;
     }
 
     .login-button {
@@ -126,7 +127,7 @@
 
     table {
       width: 100%;
-      min-width: 950px;
+      min-width: 1050px;
       border-collapse: collapse;
     }
 
@@ -147,9 +148,30 @@
       background: #f5f8ff;
     }
 
-    .status {
-      font-weight: bold;
-      white-space: nowrap;
+    .status-box {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 150px;
+    }
+
+    .status-select {
+      width: 100%;
+      padding: 9px;
+      border: 1px solid #ccc;
+      border-radius: 7px;
+      font-size: 14px;
+      background: white;
+    }
+
+    .save-status {
+      background: #198754;
+      padding: 9px 12px;
+      font-size: 13px;
+    }
+
+    .save-status:disabled {
+      background: #777;
     }
 
     .empty {
@@ -172,6 +194,13 @@
       white-space: nowrap;
     }
 
+    #ordersMessage {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 8px;
+      display: none;
+    }
+
     @media (max-width: 700px) {
       .card {
         padding: 18px;
@@ -185,6 +214,7 @@
       .logout {
         float: none;
         width: 100%;
+        margin-bottom: 15px;
       }
     }
   </style>
@@ -373,6 +403,99 @@ function escapeHTML(value) {
 }
 
 
+/* =========================
+   MODIFICATION DU STATUT
+========================= */
+
+async function updateOrderStatus(orderId, newStatus, button) {
+
+  const accessToken =
+    localStorage.getItem("plusTechAccessToken");
+
+  if (!accessToken) {
+    alert("Session expirée. Veuillez vous reconnecter.");
+    return;
+  }
+
+  button.disabled = true;
+  button.textContent = "⏳ Enregistrement...";
+
+  try {
+
+    const response = await fetch(
+      SUPABASE_URL +
+      "/rest/v1/orders?id=eq." +
+      encodeURIComponent(orderId),
+      {
+        method: "PATCH",
+
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + accessToken,
+          "Content-Type": "application/json",
+          "Prefer": "return=minimal"
+        },
+
+        body: JSON.stringify({
+          status: newStatus
+        })
+      }
+    );
+
+    const responseText =
+      await response.text();
+
+    if (!response.ok) {
+
+      throw new Error(
+        "Supabase (" +
+        response.status +
+        ") : " +
+        responseText
+      );
+
+    }
+
+    button.textContent = "✅ Enregistré";
+
+    showOrdersMessage(
+      "✅ Le statut de la commande a été mis à jour.",
+      "success"
+    );
+
+    setTimeout(function() {
+      button.textContent = "Enregistrer";
+    }, 1500);
+
+  } catch (error) {
+
+    console.error(error);
+
+    button.textContent = "❌ Erreur";
+
+    showOrdersMessage(
+      "❌ Impossible de modifier le statut : " +
+      error.message,
+      "error"
+    );
+
+    setTimeout(function() {
+      button.textContent = "Enregistrer";
+    }, 2000);
+
+  } finally {
+
+    button.disabled = false;
+
+  }
+
+}
+
+
+/* =========================
+   CHARGEMENT COMMANDES
+========================= */
+
 async function loadOrders() {
 
   const accessToken =
@@ -447,6 +570,9 @@ async function loadOrders() {
                 .toLocaleString("fr-FR")
             : "—";
 
+        const currentStatus =
+          order.status || "Nouvelle";
+
         return `
           <tr>
 
@@ -478,14 +604,95 @@ async function loadOrders() {
               ${escapeHTML(order.request || "—")}
             </td>
 
-            <td class="status">
-              ${escapeHTML(order.status || "Nouvelle")}
+            <td>
+
+              <div class="status-box">
+
+                <select
+                  class="status-select"
+                  id="status-${escapeHTML(order.id)}"
+                >
+
+                  <option
+                    value="Nouvelle"
+                    ${currentStatus === "Nouvelle" ? "selected" : ""}
+                  >
+                    🆕 Nouvelle
+                  </option>
+
+                  <option
+                    value="En cours"
+                    ${currentStatus === "En cours" ? "selected" : ""}
+                  >
+                    🔄 En cours
+                  </option>
+
+                  <option
+                    value="Terminée"
+                    ${currentStatus === "Terminée" ? "selected" : ""}
+                  >
+                    ✅ Terminée
+                  </option>
+
+                  <option
+                    value="Annulée"
+                    ${currentStatus === "Annulée" ? "selected" : ""}
+                  >
+                    ❌ Annulée
+                  </option>
+
+                </select>
+
+                <button
+                  class="save-status"
+                  data-order-id="${escapeHTML(order.id)}"
+                >
+                  Enregistrer
+                </button>
+
+              </div>
+
             </td>
 
           </tr>
         `;
 
       }).join("");
+
+
+    /* Boutons Enregistrer */
+
+    document
+      .querySelectorAll(".save-status")
+      .forEach(function(button) {
+
+        button.addEventListener(
+          "click",
+          function() {
+
+            const orderId =
+              button.getAttribute("data-order-id");
+
+            const select =
+              document.getElementById(
+                "status-" + orderId
+              );
+
+            if (!select) {
+              return;
+            }
+
+            updateOrderStatus(
+              orderId,
+              select.value,
+              button
+            );
+
+          }
+        );
+
+      });
+
 
   } catch (error) {
 
@@ -504,6 +711,7 @@ async function loadOrders() {
   } finally {
 
     refreshButton.disabled = false;
+
     refreshButton.textContent =
       "🔄 Actualiser les commandes";
 
@@ -511,6 +719,10 @@ async function loadOrders() {
 
 }
 
+
+/* =========================
+   CONNEXION
+========================= */
 
 loginForm.addEventListener(
   "submit",
@@ -540,6 +752,7 @@ loginForm.addEventListener(
     }
 
     loginButton.disabled = true;
+
     loginButton.textContent =
       "⏳ Connexion...";
 
@@ -600,6 +813,7 @@ loginForm.addEventListener(
     } finally {
 
       loginButton.disabled = false;
+
       loginButton.textContent =
         "Se connecter";
 
@@ -609,11 +823,19 @@ loginForm.addEventListener(
 );
 
 
+/* =========================
+   ACTUALISER
+========================= */
+
 refreshButton.addEventListener(
   "click",
   loadOrders
 );
 
+
+/* =========================
+   DÉCONNEXION
+========================= */
 
 logoutButton.addEventListener(
   "click",
@@ -634,6 +856,10 @@ logoutButton.addEventListener(
   }
 );
 
+
+/* =========================
+   SESSION EXISTANTE
+========================= */
 
 if (
   localStorage.getItem(
