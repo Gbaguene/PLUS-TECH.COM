@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Suivre ma commande - PLUS-TECH.COM</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+      color: #222;
+    }
+
+    header {
+      background: #0b5ed7;
+      color: white;
+      text-align: center;
+      padding: 22px 15px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    header p {
+      margin: 7px 0 0;
+    }
+
+    .container {
+      max-width: 650px;
+      margin: 35px auto;
+      padding: 15px;
+    }
+
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.08);
+    }
+
+    h2 {
+      text-align: center;
+      color: #0b5ed7;
+      margin-top: 0;
+    }
+
+    .intro {
+      text-align: center;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    label {
+      display: block;
+      margin-top: 20px;
+      margin-bottom: 7px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 17px;
+      text-align: center;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 18px;
+      padding: 14px;
+      border: 0;
+      border-radius: 8px;
+      background: #0b5ed7;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      background: #777;
+    }
+
+    #message {
+      margin-top: 18px;
+      padding: 14px;
+      border-radius: 8px;
+      display: none;
+      text-align: center;
+    }
+
+    .error {
+      display: block !important;
+      background: #f8d7da;
+      color: #842029;
+    }
+
+    .result {
+      margin-top: 20px;
+      display: none;
+    }
+
+    .result-card {
+      background: #eef5ff;
+      border: 2px solid #0b5ed7;
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .tracking-code {
+      text-align: center;
+      color: #0b5ed7;
+      font-size: 24px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+    }
+
+    .info {
+      padding: 12px 0;
+      border-bottom: 1px solid #d5e2f5;
+    }
+
+    .info:last-child {
+      border-bottom: none;
+    }
+
+    .info strong {
+      display: block;
+      margin-bottom: 5px;
+      color: #555;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+
+    .status-new {
+      background: #fff3cd;
+      color: #664d03;
+    }
+
+    .status-progress {
+      background: #cff4fc;
+      color: #055160;
+    }
+
+    .status-done {
+      background: #d1e7dd;
+      color: #0f5132;
+    }
+
+    .status-cancelled {
+      background: #f8d7da;
+      color: #842029;
+    }
+
+    .back {
+      display: block;
+      margin-top: 22px;
+      text-align: center;
+      text-decoration: none;
+      color: #0b5ed7;
+    }
+
+    .steps {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 25px;
+      gap: 5px;
+    }
+
+    .step {
+      flex: 1;
+      text-align: center;
+      font-size: 12px;
+      color: #999;
+    }
+
+    .circle {
+      width: 34px;
+      height: 34px;
+      line-height: 34px;
+      margin: 0 auto 6px;
+      border-radius: 50%;
+      background: #ddd;
+      color: #666;
+      font-weight: bold;
+    }
+
+    .step.active .circle {
+      background: #0b5ed7;
+      color: white;
+    }
+
+    .step.active {
+      color: #0b5ed7;
+      font-weight: bold;
+    }
+
+    .cancelled-message {
+      margin-top: 18px;
+      padding: 12px;
+      border-radius: 8px;
+      background: #f8d7da;
+      color: #842029;
+      text-align: center;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>PLUS-TECH.COM</h1>
+  <p>Suivi de commande</p>
+</header>
+
+<div class="container">
+
+  <div class="card">
+
+    <h2>🔎 Suivre ma commande</h2>
+
+    <p class="intro">
+      Entrez le code de suivi reçu après votre commande.
+    </p>
+
+    <label for="trackingCode">
+      Code de suivi
+    </label>
+
+    <input
+      type="text"
+      id="trackingCode"
+      placeholder="Exemple : PT-RR7HPL"
+      maxlength="9"
+      autocomplete="off"
+    >
+
+    <button
+      id="searchButton"
+      type="button"
+    >
+      🔎 Rechercher ma commande
+    </button>
+
+    <div id="message"></div>
+
+    <div
+      id="result"
+      class="result"
+    >
+
+      <div class="result-card">
+
+        <div
+          id="displayCode"
+          class="tracking-code"
+        ></div>
+
+        <div class="info">
+          <strong>Service</strong>
+          <span id="displayService"></span>
+        </div>
+
+        <div class="info">
+          <strong>Appareil</strong>
+          <span id="displayDevice"></span>
+        </div>
+
+        <div class="info">
+          <strong>Statut</strong>
+          <span id="displayStatus"></span>
+        </div>
+
+        <div class="info">
+          <strong>Date de commande</strong>
+          <span id="displayDate"></span>
+        </div>
+
+        <div
+          id="stepsContainer"
+          class="steps"
+        >
+
+          <div
+            id="stepNew"
+            class="step"
+          >
+            <div class="circle">1</div>
+            Nouvelle
+          </div>
+
+          <div
+            id="stepProgress"
+            class="step"
+          >
+            <div class="circle">2</div>
+            En cours
+          </div>
+
+          <div
+            id="stepDone"
+            class="step"
+          >
+            <div class="circle">3</div>
+            Terminée
+          </div>
+
+        </div>
+
+        <div
+          id="cancelledMessage"
+          class="cancelled-message"
+          style="display:none;"
+        >
+          ❌ Cette commande a été annulée.
+        </div>
+
+      </div>
+
+    </div>
+
+    <a
+      class="back"
+      href="index.html"
+    >
+      ← Retour à l'accueil
+    </a>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/* =====================================
+   SUPABASE
+===================================== */
+
+const SUPABASE_URL =
+  "https://swbjlvwttlpjfrnvbrwv.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_Pjp5z2zXmhft_bcuInMc2A_PKIEYRq1";
+
+
+/* =====================================
+   ÉLÉMENTS
+===================================== */
+
+const trackingInput =
+  document.getElementById("trackingCode");
+
+const searchButton =
+  document.getElementById("searchButton");
+
+const message =
+  document.getElementById("message");
+
+const result =
+  document.getElementById("result");
+
+
+/* =====================================
+   MESSAGE ERREUR
+===================================== */
+
+function showError(text) {
+
+  message.textContent = text;
+
+  message.className = "error";
+
+  message.style.display = "block";
+}
+
+
+/* =====================================
+   CACHER MESSAGE
+===================================== */
+
+function hideMessage() {
+
+  message.textContent = "";
+
+  message.className = "";
+
+  message.style.display = "none";
+}
+
+
+/* =====================================
+   ÉCHAPPER HTML
+===================================== */
+
+function escapeHTML(value) {
+
+  const div =
+    document.createElement("div");
+
+  div.textContent =
+    value == null ? "" : String(value);
+
+  return div.innerHTML;
+}
+
+
+/* =====================================
+   STATUT
+===================================== */
+
+function displayStatus(status) {
+
+  const statusElement =
+    document.getElementById("displayStatus");
+
+  statusElement.className =
+    "status";
+
+
+  if (status === "Nouvelle") {
+
+    statusElement.classList.add(
+      "status-new"
+    );
+
+    statusElement.textContent =
+      "🆕 Nouvelle";
+
+  }
+
+  else if (status === "En cours") {
+
+    statusElement.classList.add(
+      "status-progress"
+    );
+
+    statusElement.textContent =
+      "🔄 En cours";
+
+  }
+
+  else if (status === "Terminée") {
+
+    statusElement.classList.add(
+      "status-done"
+    );
+
+    statusElement.textContent =
+      "✅ Terminée";
+
+  }
+
+  else if (status === "Annulée") {
+
+    statusElement.classList.add(
+      "status-cancelled"
+    );
+
+    statusElement.textContent =
+      "❌ Annulée";
+
+  }
+
+  else {
+
+    statusElement.textContent =
+      status || "Inconnu";
+
+  }
+
+}
+
+
+/* =====================================
+   PROGRESSION
+===================================== */
+
+function updateSteps(status) {
+
+  const stepNew =
+    document.getElementById("stepNew");
+
+  const stepProgress =
+    document.getElementById("stepProgress");
+
+  const stepDone =
+    document.getElementById("stepDone");
+
+  const cancelled =
+    document.getElementById(
+      "cancelledMessage"
+    );
+
+
+  stepNew.classList.remove("active");
+
+  stepProgress.classList.remove("active");
+
+  stepDone.classList.remove("active");
+
+  cancelled.style.display =
+    "none";
+
+
+  if (status === "Nouvelle") {
+
+    stepNew.classList.add("active");
+
+  }
+
+  else if (status === "En cours") {
+
+    stepNew.classList.add("active");
+
+    stepProgress.classList.add(
+      "active"
+    );
+
+  }
+
+  else if (status === "Terminée") {
+
+    stepNew.classList.add("active");
+
+    stepProgress.classList.add(
+      "active"
+    );
+
+    stepDone.classList.add("active");
+
+  }
+
+  else if (status === "Annulée") {
+
+    cancelled.style.display =
+      "block";
+
+  }
+
+}
+
+
+/* =====================================
+   RECHERCHE
+===================================== */
+
+async function searchOrder() {
+
+  hideMessage();
+
+  result.style.display =
+    "none";
+
+
+  let code =
+    trackingInput.value.trim().toUpperCase();
+
+
+  /* Accepter PT-XXXXXX */
+
+  if (!code) {
+
+    showError(
+      "❌ Entrez votre code de suivi."
+    );
+
+    return;
+  }
+
+
+  if (!/^PT-[A-Z0-9]{6}$/.test(code)) {
+
+    showError(
+      "❌ Code invalide. Exemple : PT-RR7HPL"
+    );
+
+    return;
+  }
+
+
+  if (
+    SUPABASE_KEY ===
+    "COLLE_ICI_TA_PUBLISHABLE_KEY"
+  ) {
+
+    showError(
+      "❌ La Publishable Key Supabase n'a pas encore été ajoutée."
+    );
+
+    return;
+  }
+
+
+  searchButton.disabled =
+    true;
+
+  searchButton.textContent =
+    "⏳ Recherche...";
+
+
+  try {
+
+    const response =
+      await fetch(
+        SUPABASE_URL +
+        "/rest/v1/rpc/get_order_status",
+        {
+
+          method: "POST",
+
+          headers: {
+
+            "Content-Type":
+              "application/json",
+
+            "apikey":
+              SUPABASE_KEY,
+
+            "Authorization":
+              "Bearer " + SUPABASE_KEY
+
+          },
+
+          body:
+            JSON.stringify({
+              p_tracking_code: code
+            })
+
+        }
+      );
+
+
+    const responseText =
+      await response.text();
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        "Supabase (" +
+        response.status +
+        ") : " +
+        responseText
+      );
+
+    }
+
+
+    const data =
+      responseText
+        ? JSON.parse(responseText)
+        : [];
+
+
+    if (
+      !Array.isArray(data) ||
+      data.length === 0
+    ) {
+
+      showError(
+        "❌ Aucun commande trouvée avec ce code de suivi."
+      );
+
+      return;
+    }
+
+
+    const order =
+      data[0];
+
+
+    /* =================================
+       AFFICHAGE
+    ================================= */
+
+    document.getElementById(
+      "displayCode"
+    ).textContent =
+      order.tracking_code;
+
+
+    document.getElementById(
+      "displayService"
+    ).textContent =
+      order.service || "-";
+
+
+    document.getElementById(
+      "displayDevice"
+    ).textContent =
+      order.device || "-";
+
+
+    displayStatus(
+      order.status
+    );
+
+
+    /* Date */
+
+    if (order.created_at) {
+
+      const date =
+        new Date(order.created_at);
+
+      document.getElementById(
+        "displayDate"
+      ).textContent =
+        date.toLocaleString(
+          "fr-FR"
+        );
+
+    }
+
+    else {
+
+      document.getElementById(
+        "displayDate"
+      ).textContent =
+        "-";
+
+    }
+
+
+    updateSteps(
+      order.status
+    );
+
+
+    result.style.display =
+      "block";
+
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "Erreur suivi :",
+      error
+    );
+
+    showError(
+      "❌ Impossible de rechercher la commande.\n" +
+      error.message
+    );
+
+  }
+
+  finally {
+
+    searchButton.disabled =
+      false;
+
+    searchButton.textContent =
+      "🔎 Rechercher ma commande";
+
+  }
+
+}
+
+
+/* =====================================
+   BOUTON
+===================================== */
+
+searchButton.addEventListener(
+  "click",
+  searchOrder
+);
+
+
+/* =====================================
+   TOUCHE ENTRÉE
+===================================== */
+
+trackingInput.addEventListener(
+  "keydown",
+  function(event) {
+
+    if (event.key === "Enter") {
+
+      searchOrder();
+
+    }
+
+  }
+);
+
+</script>
+
+</body>
+</html>
