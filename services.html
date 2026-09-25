@@ -1,274 +1,270 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Services — PLUS-TECH.COM</title>
 
-  <title>Services - PLUS-TECH.COM</title>
-  <meta name="description" content="Découvrez les services numériques professionnels de PLUS-TECH.COM.">
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:#f3f6fb;
+  color:#222;
+}
 
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f4f7fb;
-      color: #222;
-    }
+header{
+  background:linear-gradient(135deg,#0866d8,#06479b);
+  color:white;
+  padding:15px 20px;
+  position:sticky;
+  top:0;
+  z-index:100;
+  box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
 
-    header {
-      background: #0b5ed7;
-      color: white;
-      padding: 18px 20px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: 0 3px 12px rgba(0,0,0,.15);
-    }
+.header-content{
+  max-width:1200px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
 
-    .nav {
-      max-width: 1200px;
-      margin: auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 15px;
-    }
+.logo{
+  font-size:22px;
+  font-weight:bold;
+}
 
-    .logo {
-      color: white;
-      text-decoration: none;
-      font-size: 24px;
-      font-weight: bold;
-    }
+.logo span{
+  color:#ff7518;
+}
 
-    .logo span {
-      color: #ffd43b;
-    }
+nav a{
+  color:white;
+  text-decoration:none;
+  margin-left:18px;
+  font-size:14px;
+}
 
-    .logo small {
-      font-size: 13px;
-    }
+nav a:hover{
+  text-decoration:underline;
+}
 
-    .back {
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-    }
+.hero{
+  background:linear-gradient(135deg,#0866d8,#073f91);
+  color:white;
+  text-align:center;
+  padding:45px 20px;
+}
 
-    .hero {
-      background: linear-gradient(135deg, #0b5ed7, #084298);
-      color: white;
-      padding: 55px 20px;
-      text-align: center;
-    }
+.hero h1{
+  font-size:32px;
+  margin-bottom:10px;
+}
 
-    .hero h1 {
-      margin: 0 0 12px;
-      font-size: 38px;
-    }
+.hero p{
+  max-width:700px;
+  margin:auto;
+  line-height:1.6;
+  opacity:.95;
+}
 
-    .hero p {
-      max-width: 650px;
-      margin: auto;
-      line-height: 1.6;
-    }
+.container{
+  max-width:1200px;
+  margin:auto;
+  padding:25px 15px;
+}
 
-    .container {
-      max-width: 1200px;
-      margin: auto;
-      padding: 25px 18px;
-    }
+.search-box{
+  background:white;
+  padding:15px;
+  border-radius:10px;
+  box-shadow:0 2px 10px rgba(0,0,0,.08);
+  margin-bottom:30px;
+}
 
-    .search-box {
-      background: white;
-      padding: 15px;
-      border-radius: 12px;
-      box-shadow: 0 4px 18px rgba(0,0,0,.08);
-      margin-bottom: 35px;
-    }
+.search-box input{
+  width:100%;
+  padding:14px;
+  border:1px solid #ddd;
+  border-radius:7px;
+  font-size:15px;
+  outline:none;
+}
 
-    .search-box input {
-      width: 100%;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 14px;
-      font-size: 16px;
-      outline: none;
-    }
+.search-box input:focus{
+  border-color:#0866d8;
+}
 
-    .category {
-      margin-bottom: 45px;
-    }
+.notice{
+  background:#fff3cd;
+  color:#705b13;
+  padding:13px;
+  border-radius:8px;
+  margin-bottom:30px;
+  font-size:13px;
+}
 
-    .category-title {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 18px;
-    }
+.category{
+  margin-bottom:35px;
+}
 
-    .category-title h2 {
-      margin: 0;
-      color: #0b5ed7;
-      font-size: 25px;
-    }
+.category-title{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  color:#1260b8;
+  font-size:22px;
+  margin-bottom:15px;
+}
 
-    .category-icon {
-      font-size: 28px;
-    }
+.services-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:15px;
+}
 
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-    }
+.service-card{
+  background:white;
+  border-radius:10px;
+  padding:18px;
+  box-shadow:0 2px 10px rgba(0,0,0,.08);
+  border:1px solid #e7eaf0;
+  transition:.2s;
+}
 
-    .service-card {
-      background: white;
-      border-radius: 14px;
-      padding: 20px;
-      box-shadow: 0 4px 18px rgba(0,0,0,.07);
-      border: 1px solid #e8edf5;
-      transition: .2s;
-    }
+.service-card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 5px 16px rgba(0,0,0,.12);
+}
 
-    .service-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 25px rgba(0,0,0,.12);
-    }
+.service-card h3{
+  font-size:16px;
+  margin-bottom:10px;
+  color:#222;
+}
 
-    .service-card h3 {
-      margin: 0 0 10px;
-      font-size: 19px;
-    }
+.service-card p{
+  color:#666;
+  font-size:13px;
+  line-height:1.5;
+  min-height:55px;
+}
 
-    .service-card p {
-      color: #666;
-      line-height: 1.5;
-      min-height: 48px;
-    }
+.price{
+  color:#1765b5;
+  font-weight:bold;
+  font-size:17px;
+  margin:12px 0 7px;
+}
 
-    .price {
-      font-size: 19px;
-      font-weight: bold;
-      color: #0b5ed7;
-      margin: 15px 0;
-    }
+.status{
+  color:#218653;
+  font-size:12px;
+  margin-bottom:12px;
+}
 
-    .available {
-      font-size: 13px;
-      color: #198754;
-      font-weight: bold;
-      margin-bottom: 14px;
-    }
+.order-btn{
+  display:block;
+  width:100%;
+  text-align:center;
+  background:#1267d6;
+  color:white;
+  padding:11px;
+  border-radius:6px;
+  text-decoration:none;
+  font-weight:bold;
+  font-size:13px;
+}
 
-    .order-btn {
-      display: block;
-      text-align: center;
-      text-decoration: none;
-      background: #0b5ed7;
-      color: white;
-      padding: 12px;
-      border-radius: 8px;
-      font-weight: bold;
-    }
+.order-btn:hover{
+  background:#0955b8;
+}
 
-    .order-btn:hover {
-      background: #084298;
-    }
+footer{
+  background:#092b55;
+  color:white;
+  text-align:center;
+  padding:25px 15px;
+  margin-top:30px;
+}
 
-    .notice {
-      background: #fff3cd;
-      color: #664d03;
-      border: 1px solid #ffecb5;
-      padding: 15px;
-      border-radius: 10px;
-      margin-bottom: 35px;
-      line-height: 1.5;
-    }
+footer p{
+  font-size:13px;
+  opacity:.9;
+}
 
-    .no-result {
-      display: none;
-      text-align: center;
-      background: white;
-      padding: 30px;
-      border-radius: 12px;
-      color: #666;
-    }
+@media(max-width:600px){
+  .header-content{
+    flex-direction:column;
+    gap:10px;
+  }
 
-    footer {
-      background: #111827;
-      color: white;
-      text-align: center;
-      padding: 30px 15px;
-      margin-top: 30px;
-    }
+  nav a{
+    margin:0 6px;
+    font-size:12px;
+  }
 
-    footer p {
-      margin: 7px 0;
-    }
+  .hero h1{
+    font-size:26px;
+  }
 
-    @media (max-width: 900px) {
-      .services-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 600px) {
-      .services-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .hero h1 {
-        font-size: 30px;
-      }
-
-      .nav {
-        flex-direction: column;
-      }
-
-      .back {
-        font-size: 14px;
-      }
-    }
-  </style>
+  .services-grid{
+    grid-template-columns:1fr;
+  }
+}
+</style>
 </head>
 
 <body>
 
 <header>
-  <div class="nav">
-    <a href="index.html" class="logo">
-      PLUS-<span>TECH</span><small>.COM</small>
-    </a>
+  <div class="header-content">
 
-    <a href="index.html" class="back">
-      ← Accueil
-    </a>
+    <div class="logo">
+      PLUS-<span>TECH</span>.COM
+    </div>
+
+    <nav>
+      <a href="index.html">Accueil</a>
+      <a href="services.html">Services</a>
+      <a href="order.html">Commander</a>
+      <a href="suivi.html">Suivre</a>
+    </nav>
+
   </div>
 </header>
 
+
 <section class="hero">
+
   <h1>Nos Services</h1>
+
   <p>
-    Découvrez les services numériques disponibles sur
-    PLUS-TECH.COM et choisissez la solution adaptée à votre besoin.
+    Découvrez notre catalogue de services numériques,
+    d'assistance technique et de vérification d'appareils.
   </p>
+
 </section>
+
 
 <main class="container">
 
   <div class="search-box">
     <input
       type="search"
-      id="searchInput"
+      id="search"
       placeholder="🔎 Rechercher un service..."
+      onkeyup="searchServices()"
     >
   </div>
+
 
   <div class="notice">
     ℹ️ Les services liés aux appareils sont proposés uniquement
@@ -276,304 +272,394 @@
     le client dispose d'une autorisation.
   </div>
 
+
   <!-- IMEI -->
+
   <section class="category">
 
-    <div class="category-title">
-      <span class="category-icon">📱</span>
-      <h2>IMEI Services</h2>
-    </div>
+    <h2 class="category-title">
+      📱 IMEI Services
+    </h2>
 
     <div class="services-grid">
 
-      <article class="service-card">
+      <div class="service-card">
         <h3>Diagnostic IMEI</h3>
         <p>
           Vérification des informations disponibles
           concernant un appareil compatible.
         </p>
         <div class="price">5 000 FCFA</div>
-        <div class="available">● Disponible</div>
-        <a class="order-btn"
-           href="order.html?service=Diagnostic%20IMEI">
+        <div class="status">● Disponible</div>
+        <a class="order-btn" href="order.html">
           Commander
         </a>
-      </article>
+      </div>
 
-      <article class="service-card">
-        <h3>Assistance appareil</h3>
-        <p>
-          Assistance technique pour un appareil
-          dont vous êtes propriétaire ou autorisé.
-        </p>
-        <div class="price">10 000 FCFA</div>
-        <div class="available">● Disponible</div>
-        <a class="order-btn"
-           href="order.html?service=Assistance%20appareil">
-          Commander
-        </a>
-      </article>
-
-      <article class="service-card">
+      <div class="service-card">
         <h3>Vérification appareil</h3>
         <p>
           Vérification des informations techniques
           d'un appareil compatible.
         </p>
         <div class="price">5 000 FCFA</div>
-        <div class="available">● Disponible</div>
-        <a class="order-btn"
-           href="order.html?service=Vérification%20appareil">
+        <div class="status">● Disponible</div>
+        <a class="order-btn" href="order.html">
           Commander
         </a>
-      </article>
+      </div>
+
+      <div class="service-card">
+        <h3>Diagnostic Apple</h3>
+        <p>
+          Vérification et assistance concernant
+          un appareil Apple autorisé.
+        </p>
+        <div class="price">5 000 FCFA</div>
+        <div class="status">● Disponible</div>
+        <a class="order-btn" href="order.html">
+          Commander
+        </a>
+      </div>
+
+      <div class="service-card">
+        <h3>Diagnostic Android</h3>
+        <p>
+          Analyse des informations techniques
+          d'un appareil Android compatible.
+        </p>
+        <div class="price">5 000 FCFA</div>
+        <div class="status">● Disponible</div>
+        <a class="order-btn" href="order.html">
+          Commander
+        </a>
+      </div>
 
     </div>
+
   </section>
 
 
   <!-- NETWORK -->
+
   <section class="category">
 
-    <div class="category-title">
-      <span class="category-icon">🌐</span>
-      <h2>Network Services</h2>
-    </div>
+    <h2 class="category-title">
+      🌐 Network Services
+    </h2>
 
     <div class="services-grid">
 
-      <article class="service-card">
+      <div class="service-card">
         <h3>Configuration réseau</h3>
         <p>
           Configuration et assistance réseau
           pour appareils compatibles.
         </p>
         <div class="price">5 000 FCFA</div>
-        <div class="available">● Disponible</div>
-        <a class="order-btn"
-           href="order.html?service=Configuration%20réseau">
-          Commander
-        </a>
-      </article>
+        <div class="status">● Disponible</div>
+        <a class="order-btn" href="order.html">Commander</a>
+      </div>
 
-      <article class="service-card">
+      <div class="service-card">
         <h3>Assistance connexion</h3>
         <p>
           Assistance pour les problèmes de connexion
           et de configuration réseau.
         </p>
         <div class="price">5 000 FCFA</div>
-        <div class="available">● Disponible</div>
-        <a class="order-btn"
-           href="order.html?service=Assistance%20connexion">
-          Commander
-        </a>
-      </article>
+        <div class="status">● Disponible</div>
+        <a class="order-btn" href="order.html">Commander</a>
+      </div>
+
+      <div class="service-card">
+        <h3>Vérification opérateur</h3>
+        <p>
+          Vérification de l'état réseau et des
+          informations disponibles.
+        </p>
+        <div class="price">5 000 FCFA</div>
+        <div class="status">● Disponible</div>
+        <a class="order-btn" href="order.html">Commander</a>
+      </div>
 
     </div>
+
   </section>
 
 
   <!-- APPLE -->
+
   <section class="category">
 
-    <div class="category-title">
-      <span class="category-icon">☁️</span>
-      <h2>iCloud / Apple Services</h2>
-    </div>
+    <h2 class="category-title">
+      🍎 Apple Services
+    </h2>
 
     <div class="services-grid">
 
-      <article class="service-card">
-        <h3>Assistance Apple</h3>
+      <div class="service-card">
+        <h3>Assistance iPhone</h3>
         <p>
-          Assistance pour la configuration et la gestion
-          d'un appareil Apple autorisé.
+          Assistance technique et configuration
+          pour iPhone appartenant au client.
         </p>
         <div class="price">10 000 FCFA</div>
-        <div class="available">● Disponible</div>
-        <a class="order-btn"
-           href="order.html?service=Assistance%20Apple">
-          Commander
-        </a>
-      </article>
+        <div class="status">● Disponible</div>
+        <a class="order-btn" href="order.html">Commander</a>
+      </div>
 
-      <article class="service-card">
-        <h3>Configuration iPhone</h3>
+      <div class="service-card">
+        <h3>Configuration iPad</h3>
         <p>
           Configuration initiale et assistance
-          pour appareil Apple.
+          pour appareil iPad.
         </p>
         <div class="price">10 000 FCFA</div>
-        <div class="available">● Disponible</div>
-        <a class="order-btn"
-           href="order.html?service=Configuration%20iPhone">
-          Commander
-        </a>
-      </article>
+        <div class="status">● Disponible</div>
+        <a class="order-btn" href="order.html">Commander</a>
+      </div>
+
+      <div class="service-card">
+        <h3>Assistance compte Apple</h3>
+        <p>
+          Assistance pour récupérer ou configurer
+          un compte appartenant au propriétaire.
+        </p>
+        <div class="price">10 000 FCFA</div>
+        <div class="status">● Disponible</div>
+        <a class="order-btn" href="order.html">Commander</a>
+      </div>
 
     </div>
+
+  </section>
+
+
+  <!-- SAMSUNG -->
+
+  <section class="category">
+
+    <h2 class="category-title">
+      📱 Samsung Services
+    </h2>
+
+    <div class="services-grid">
+
+      <div class="service-card">
+        <h3>Diagnostic Samsung</h3>
+        <p>
+          Diagnostic et vérification des informations
+          techniques d'un appareil Samsung.
+        </p>
+        <div class="price">5 000 FCFA</div>
+        <div class="status">● Disponible</div>
+        <a class="order-btn" href="order.html">Commander</a>
+      </div>
+
+      <div class="service-card">
+        <h3>Configuration Samsung</h3>
+        <p>
+          Installation et configuration de l'appareil
+          pour son propriétaire.
+        </p>
+        <div class="price">10 000 FCFA</div>
+        <div class="status">● Disponible</div>
+        <a class="order-btn" href="order.html">Commander</a>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ANDROID -->
+
+  <section class="category">
+
+    <h2 class="category-title">
+      🤖 Android Services
+    </h2>
+
+    <div class="services-grid">
+
+      <div class="service-card">
+        <h3>Assistance Tecno</h3>
+        <p>
+          Assistance et configuration pour appareils
+          Tecno appartenant au client.
+        </p>
+        <div class="price">10 000 FCFA</div>
+        <div class="status">● Disponible</div>
+        <a class="order-btn" href="order.html">Commander</a>
+      </div>
+
+      <div class="service-card">
+        <h3>Assistance Infinix</h3>
+        <p>
+          Assistance technique et configuration
+          pour appareils Infinix.
+        </p>
+        <div class="price">10 000 FCFA</div>
+        <div class="status">● Disponible</div>
+        <a class="order-btn" href="order.html">Commander</a>
+      </div>
+
+      <div class="service-card">
+        <h3>Assistance Xiaomi</h3>
+        <p>
+          Diagnostic et configuration pour appareils
+          Xiaomi compatibles.
+        </p>
+        <div class="price">10 000 FCFA</div>
+        <div class="status">● Disponible</div>
+        <a class="order-btn" href="order.html">Commander</a>
+      </div>
+
+      <div class="service-card">
+        <h3>Assistance Huawei</h3>
+        <p>
+          Diagnostic et assistance technique
+          pour appareils Huawei.
+        </p>
+        <div class="price">10 000 FCFA</div>
+        <div class="status">● Disponible</div>
+        <a class="order-btn" href="order.html">Commander</a>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- DIGITAL -->
+
+  <section class="category">
+
+    <h2 class="category-title">
+      🛠️ Digital & Tools
+    </h2>
+
+    <div class="services-grid">
+
+      <div class="service-card">
+        <h3>Installation logiciel</h3>
+        <p>
+          Installation et configuration de logiciels
+          compatibles.
+        </p>
+        <div class="price">5 000 FCFA</div>
+        <div class="status">● Disponible</div>
+        <a class="order-btn" href="order.html">Commander</a>
+      </div>
+
+      <div class="service-card">
+        <h3>Activation logiciel autorisée</h3>
+        <p>
+          Activation de logiciels ou licences
+          officiellement disponibles.
+        </p>
+        <div class="price">Selon le service</div>
+        <div class="status">● Disponible</div>
+        <a class="order-btn" href="order.html">Commander</a>
+      </div>
+
+      <div class="service-card">
+        <h3>Outils professionnels</h3>
+        <p>
+          Accès à des outils numériques et licences
+          professionnelles disponibles.
+        </p>
+        <div class="price">Selon le service</div>
+        <div class="status">● Disponible</div>
+        <a class="order-btn" href="order.html">Commander</a>
+      </div>
+
+    </div>
+
   </section>
 
 
   <!-- SERVER -->
+
   <section class="category">
 
-    <div class="category-title">
-      <span class="category-icon">🖥️</span>
-      <h2>Server Services</h2>
-    </div>
+    <h2 class="category-title">
+      🖥️ Server Services
+    </h2>
 
     <div class="services-grid">
 
-      <article class="service-card">
+      <div class="service-card">
         <h3>Service serveur</h3>
         <p>
           Accès et assistance pour les plateformes
           numériques compatibles.
         </p>
-        <div class="price">Selon service</div>
-        <div class="available">● Disponible</div>
-        <a class="order-btn"
-           href="order.html?service=Service%20serveur">
-          Commander
-        </a>
-      </article>
+        <div class="price">Selon le service</div>
+        <div class="status">● Disponible</div>
+        <a class="order-btn" href="order.html">Commander</a>
+      </div>
 
-      <article class="service-card">
+      <div class="service-card">
         <h3>Activation autorisée</h3>
         <p>
-          Activation de services ou logiciels
-          pour les utilisateurs autorisés.
+          Activation d'un service ou d'une licence
+          officiellement disponible.
         </p>
-        <div class="price">Selon service</div>
-        <div class="available">● Disponible</div>
-        <a class="order-btn"
-           href="order.html?service=Activation%20autorisée">
-          Commander
-        </a>
-      </article>
+        <div class="price">Selon le service</div>
+        <div class="status">● Disponible</div>
+        <a class="order-btn" href="order.html">Commander</a>
+      </div>
 
     </div>
+
   </section>
-
-
-  <!-- DIGITAL TOOLS -->
-  <section class="category">
-
-    <div class="category-title">
-      <span class="category-icon">🛠️</span>
-      <h2>Digital Tools</h2>
-    </div>
-
-    <div class="services-grid">
-
-      <article class="service-card">
-        <h3>Outils numériques</h3>
-        <p>
-          Solutions et outils numériques destinés
-          aux professionnels.
-        </p>
-        <div class="price">Selon outil</div>
-        <div class="available">● Disponible</div>
-        <a class="order-btn"
-           href="order.html?service=Outils%20numériques">
-          Commander
-        </a>
-      </article>
-
-      <article class="service-card">
-        <h3>Assistance technique</h3>
-        <p>
-          Assistance technique pour vos besoins
-          numériques compatibles.
-        </p>
-        <div class="price">10 000 FCFA</div>
-        <div class="available">● Disponible</div>
-        <a class="order-btn"
-           href="order.html?service=Assistance%20technique">
-          Commander
-        </a>
-      </article>
-
-    </div>
-  </section>
-
-
-  <div id="noResult" class="no-result">
-    Aucun service trouvé.
-  </div>
 
 </main>
 
 
 <footer>
-  <strong>PLUS-TECH.COM</strong>
-  <p>Professional Digital Services</p>
-  <p>© 2026 PLUS-TECH.COM — All Rights Reserved.</p>
+
+  <p>
+    © 2026 PLUS-TECH.COM — Tous droits réservés.
+  </p>
+
+  <p style="margin-top:8px;">
+    Services numériques • Assistance • Solutions techniques
+  </p>
+
 </footer>
 
 
 <script>
 
-const searchInput =
-  document.getElementById("searchInput");
+function searchServices(){
 
-const cards =
-  document.querySelectorAll(".service-card");
+  const input =
+    document.getElementById("search")
+    .value
+    .toLowerCase();
 
-const categories =
-  document.querySelectorAll(".category");
+  const cards =
+    document.querySelectorAll(".service-card");
 
-const noResult =
-  document.getElementById("noResult");
-
-
-searchInput.addEventListener("input", function() {
-
-  const search =
-    this.value.toLowerCase().trim();
-
-  let found = 0;
-
-  cards.forEach(function(card) {
+  cards.forEach(function(card){
 
     const text =
-      card.textContent.toLowerCase();
+      card.innerText.toLowerCase();
 
-    if (text.includes(search)) {
-
+    if(text.includes(input)){
       card.style.display = "";
-      found++;
-
-    } else {
-
+    }else{
       card.style.display = "none";
-
     }
 
   });
 
-
-  categories.forEach(function(category) {
-
-    const visibleCards =
-      category.querySelectorAll(
-        ".service-card:not([style*='display: none'])"
-      );
-
-    category.style.display =
-      visibleCards.length ? "" : "none";
-
-  });
-
-
-  noResult.style.display =
-    found === 0 ? "block" : "none";
-
-});
+}
 
 </script>
 
 </body>
-  </html>
+</html>
